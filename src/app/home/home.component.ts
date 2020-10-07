@@ -12,7 +12,7 @@ export class HomeComponent implements OnInit {
   constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
-    this.http.get('http://localhost:5000/helloworld') 
+    this.http.get('https://project-2-api-hfr.herokuapp.com/helloworld') 
     .subscribe(Response => { 
   
       // If response comes hideloader() function is called 
