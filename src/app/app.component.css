@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;700&display=swap');
+
+:root{ 
+    font-size: 62.5;
+    position: fixed;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+    overflow-y: hidden;
+}
+
+html, body{
+    overflow: hidden;
+}
+
+.bold,.medium,.regular{
+    margin-bottom: 1rem;
+}
+
+.btn:hover{
+    cursor: pointer;
+    box-shadow: 0 0.4rem 1.4rem rgba(86, 158, 235, 0.5);
+    transform: translateY(-0.1rem);
+    transition: 150ms;
+}
+
+.bold{
+    font-weight: 700;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    color: #333;
+}
+
+.medium{
+    font-weight: 500;
+    font-size: 1.2rem;
+}
+
+.regular{
+    font-weight: 400;
+    font-size: 0.9rem;
+}
+
+.container{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;/*Allign things vertically*/
+    align-items: flex-start;/*Align things horisontally*/
+    max-width: 90rem;
+    margin:0 auto;
+}
+
+.flex-row{
+    display: flex;
+    flex-direction: column;
+}
+
+
+.flex-center{
+    justify-content: center;
+    align-items: center;
+}
+
+@media only screen and (max-width: 30.0625rem){
+    .flex-row{
+        display: flex;
+        flex-direction: column;
+    }
+}
