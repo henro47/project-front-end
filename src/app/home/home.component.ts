@@ -6,7 +6,7 @@ import { visitFunctionBody } from 'typescript';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css','../app.component.css']
 })
 export class HomeComponent implements OnInit {
 
@@ -24,7 +24,7 @@ export class HomeComponent implements OnInit {
       console.log("Array: " + result);
       // If response comes hideloader() function is called 
       // to hide that loader  
-      document.getElementById("test").innerHTML = result.toString();
+      //document.getElementById("test").innerHTML = result.toString();
     }); 
 
   }
