@@ -16,11 +16,52 @@
               <mat-card-subtitle class ="medium">Dog Breed</mat-card-subtitle>
             </mat-card-header>
             <mat-card-content class="regular">
-              <p>
-                The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-                A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-                bred for hunting.
-              </p>
+
+              <form class="form">
+                <mat-form-field class="form-full-width">
+                  <mat-label>Email</mat-label>
+                  <input matInput [formControl]="emailFormControl" placeholder="Ex. pat@example.com">
+                  <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+                    Please enter a valid email address
+                  </mat-error>
+                  <mat-error *ngIf="emailFormControl.hasError('required')">
+                    Email is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </form>
+
+              <mat-divider></mat-divider>
+
+              <form class="form">
+                <mat-form-field class="form-full-width">
+                  <mat-label>Identification Number(RSA)</mat-label>
+                  <input matInput [formControl]="fIDNumberControl" placeholder="1234567890123">
+                  <mat-error *ngIf="fIDNumberControl.hasError('minLength') && !fIDNumberControl.hasError('required') && !fIDNumberControl.hasError('maxLength')" >
+                    Please enter a valid id number
+                  </mat-error>
+                  <mat-error *ngIf="fIDNumberControl.hasError('required')">
+                    ID is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </form>
+
+              <mat-divider></mat-divider>
+
+              <form class="form">
+                <mat-form-field class="form-full-width">
+                  <mat-label>Name</mat-label>
+                  <input matInput [formControl]="fNameControl" placeholder="John">
+                  <mat-error *ngIf="fNameControl.hasError('minLength') && !fNameControl.hasError('required')">
+                    Please enter a valid name
+                  </mat-error>
+                  <mat-error *ngIf="fNameControl.hasError('required')">
+                    first name is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </form>
+
+              <mat-divider></mat-divider>
+
             </mat-card-content>
         </mat-card>
 

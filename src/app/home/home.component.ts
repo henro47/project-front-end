@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import { visitFunctionBody } from 'typescript';
+import {FormControl, Validators} from '@angular/forms';
 import { faFileUpload} from '@fortawesome/free-solid-svg-icons';
 
 
@@ -10,6 +11,24 @@ import { faFileUpload} from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./home.component.css','../app.component.css']
 })
 export class HomeComponent implements OnInit {
+
+  emailFormControl = new FormControl('', [
+    Validators.required,
+    Validators.email,
+  ]);
+
+  fIDNumberControl = new FormControl('',[
+    Validators.required,
+    Validators.minLength(13),
+    Validators.maxLength(13)
+  ]);
+
+  fNameControl = new FormControl('',[
+    Validators.required,
+    Validators.minLength(1)
+  ]);
+
+
 
   uploadTitle = "Upload" ;
   uploadSub = "Upload your file here";
