@@ -7,10 +7,12 @@
     right: 0;
     overflow: hidden;
     overflow-y: hidden;
+    
 }
 
 html, body{
     overflow: hidden;
+    background-color: #333;
 }
 
 .bold,.medium,.regular{
@@ -64,6 +66,22 @@ html, body{
 .flex-center{
     justify-content: center;
     align-items: center;
+}
+
+.btn:hover{
+    cursor: pointer;
+    box-shadow: 0 0.4rem 1.4rem rgba(86, 158, 235, 0.5);
+    transform: translateY(-0.1rem);
+    transition: 150ms;
+}
+
+.icon fa-icon{
+    width: 5.6rem;
+    height: 5.6rem;
+    color: #0bb5f4 ;
+    margin-right: 0.8rem;
+    font-size: 2rem;
+    position: relative;
 }
 
 @media only screen and (max-width: 30.0625rem){

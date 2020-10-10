@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import { visitFunctionBody } from 'typescript';
+import { faFileUpload} from '@fortawesome/free-solid-svg-icons';
 
 
 @Component({
@@ -9,6 +10,11 @@ import { visitFunctionBody } from 'typescript';
   styleUrls: ['./home.component.css','../app.component.css']
 })
 export class HomeComponent implements OnInit {
+
+  uploadTitle = "Upload" ;
+  uploadSub = "Upload your file here";
+  btnUploadTitle = "Upload file";
+  uploadIco = faFileUpload;
 
   constructor(private http: HttpClient) { }
 
