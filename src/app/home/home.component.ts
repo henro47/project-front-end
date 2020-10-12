@@ -43,17 +43,22 @@ export class HomeComponent implements OnInit {
         {
           if(lines[i].includes('first'))
           {
+            
             var data = lines[i].split(':');
+            (document.getElementById("first-name") as HTMLInputElement).value = data[1];
           }
 
           if(lines[i].includes('last'))
           {
+            
             var data = lines[i].split(':');
+            (document.getElementById("last-name") as HTMLInputElement).value = data[1];
           }
 
           if(lines[i].includes('id'))
           {
             var data = lines[i].split(':');
+            (document.getElementById("id") as HTMLInputElement).value = data[1];
           }
 
           if(lines[i].includes('email'))
@@ -69,7 +74,7 @@ export class HomeComponent implements OnInit {
         console.log(reader.error);
       };
     }    
-  } 
+  };
 
   uploadTitle = "Upload" ;
   uploadSub = "Upload your file here";

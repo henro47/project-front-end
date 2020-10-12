@@ -41,7 +41,7 @@
             <form class="form" id = "idNum">
               <mat-form-field class="form-full-width">
                 <mat-label>Identification Number(RSA)</mat-label>
-                <input matInput [formControl]="fIDNumberControl" placeholder="1234567890123">
+                <input id="id" matInput [formControl]="fIDNumberControl" placeholder="1234567890123">
                 <mat-error *ngIf="fIDNumberControl.hasError('minLength') && !fIDNumberControl.hasError('required') && !fIDNumberControl.hasError('maxLength')" >
                   Please enter a valid id number
                 </mat-error>
@@ -56,7 +56,7 @@
             <form class="form">
               <mat-form-field class="form-full-width">
                 <mat-label>First Name</mat-label>
-                <input matInput [formControl]="fNameControl" placeholder="John">
+                <input id="first-name" matInput [formControl]="fNameControl" placeholder="John">
                 <mat-error *ngIf="fNameControl.hasError('minLength') && !fNameControl.hasError('required')">
                   Please enter a valid first name
                 </mat-error>
@@ -71,7 +71,7 @@
             <form class="form">
               <mat-form-field class="form-full-width">
                 <mat-label>Last Name</mat-label>
-                <input matInput [formControl]="fNameControl" placeholder="Doe">
+                <input id="last-name" matInput [formControl]="fNameControl" placeholder="Doe">
                 <mat-error *ngIf="fNameControl.hasError('minLength') && !fNameControl.hasError('required')">
                   Please enter a valid last name
                 </mat-error>
