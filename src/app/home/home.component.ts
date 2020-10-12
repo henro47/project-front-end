@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import { visitFunctionBody } from 'typescript';
 import {FormControl, Validators} from '@angular/forms';
-import { faFileUpload} from '@fortawesome/free-solid-svg-icons';
+import { faFileUpload, faInfoCircle} from '@fortawesome/free-solid-svg-icons';
 
 
 @Component({
@@ -28,12 +28,16 @@ export class HomeComponent implements OnInit {
     Validators.minLength(1)
   ]);
 
-
+  
 
   uploadTitle = "Upload" ;
   uploadSub = "Upload your file here";
   btnUploadTitle = "Upload file";
   uploadIco = faFileUpload;
+
+  infoTitle = "Personal Information" ;
+  infoSubtitle = "Check your personal info";
+  infoIco = faInfoCircle;
 
   constructor(private http: HttpClient) { }
 
