@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import { visitFunctionBody } from 'typescript';
-import { FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { faFileUpload, faInfoCircle} from '@fortawesome/free-solid-svg-icons';
 
 
@@ -39,6 +38,9 @@ export class HomeComponent implements OnInit {
 
       reader.onload = function() {
         console.log(reader.result);
+        var lines = reader.result.toString().split('\n');
+
+        console.log("File ARRAY:" + lines);
       };
     
       reader.onerror = function() {
