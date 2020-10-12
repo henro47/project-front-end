@@ -4,7 +4,6 @@ import { visitFunctionBody } from 'typescript';
 import {FormControl, Validators} from '@angular/forms';
 import { faFileUpload, faInfoCircle} from '@fortawesome/free-solid-svg-icons';
 
-
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -30,11 +29,11 @@ export class HomeComponent implements OnInit {
 
   csvInputChange(fileInputEvent: any) {
     console.log(fileInputEvent.target.files[0]);
-  }
+  };
 
   uploadTitle = "Upload" ;
   uploadSub = "Upload your file here";
-  btnUploadTitle = "Upload file";
+  btnUploadTitle = "Upload File";
   uploadIco = faFileUpload;
 
   infoTitle = "Personal Information" ;

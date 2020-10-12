@@ -26,6 +26,10 @@ html, body{
     transition: 150ms;
 }
 
+.btn{
+    justify-content: center;
+}
+
 .bold{
     font-weight: 700;
     font-size: 1.5rem;
