@@ -39,20 +39,37 @@ export class HomeComponent implements OnInit {
       reader.onload = function() {
         console.log(reader.result);
         var lines = reader.result.toString().split('\n');
+        for(let i = 0; i <lines.length;i++)
+        {
+          if(lines[i].includes('first'))
+          {
+            var data = lines[i].split(':');
+          }
 
-        console.log("File ARRAY:" + lines);
+          if(lines[i].includes('last'))
+          {
+            var data = lines[i].split(':');
+          }
+
+          if(lines[i].includes('id'))
+          {
+            var data = lines[i].split(':');
+          }
+
+          if(lines[i].includes('email'))
+          {
+            var data = lines[i].split(':');
+            (document.getElementById("email") as HTMLInputElement).value = data[1];
+            console.log("email is included" + data[1]);
+          }
+        }
       };
     
       reader.onerror = function() {
         console.log(reader.error);
       };
-    }
-    else
-    {
-      console.log("No file has been selected");
-    }
-     
-  };
+    }    
+  } 
 
   uploadTitle = "Upload" ;
   uploadSub = "Upload your file here";
@@ -62,8 +79,14 @@ export class HomeComponent implements OnInit {
   infoTitle = "Personal Information" ;
   infoSubtitle = "Check your personal info";
   infoIco = faInfoCircle;
+  
+  public emailInput: String ;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { 
+    this.emailInput = "Intial value" ;
+  }
+
+  
 
   ngOnInit(): void {
     this.http.get('https://project-2-api-hfr.herokuapp.com/helloworld') 
