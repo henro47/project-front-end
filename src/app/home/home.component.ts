@@ -28,7 +28,9 @@ export class HomeComponent implements OnInit {
     Validators.minLength(1)
   ]);
 
-  
+  csvInputChange(fileInputEvent: any) {
+    console.log(fileInputEvent.target.files[0]);
+  }
 
   uploadTitle = "Upload" ;
   uploadSub = "Upload your file here";
