@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import { visitFunctionBody } from 'typescript';
-import {FormControl, Validators} from '@angular/forms';
+import { FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { faFileUpload, faInfoCircle} from '@fortawesome/free-solid-svg-icons';
+
 
 @Component({
   selector: 'app-home',
@@ -29,6 +30,26 @@ export class HomeComponent implements OnInit {
 
   csvInputChange(fileInputEvent: any) {
     console.log(fileInputEvent.target.files[0]);
+    var file = fileInputEvent.target.files[0] ;
+    var reader = new FileReader();
+
+    if(file != null)
+    {
+      reader.readAsText(file);
+
+      reader.onload = function() {
+        console.log(reader.result);
+      };
+    
+      reader.onerror = function() {
+        console.log(reader.error);
+      };
+    }
+    else
+    {
+      console.log("No file has been selected");
+    }
+     
   };
 
   uploadTitle = "Upload" ;
