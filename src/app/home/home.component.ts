@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { FormControl, Validators } from '@angular/forms';
 import { faFileUpload, faInfoCircle} from '@fortawesome/free-solid-svg-icons';
+import { createAotUrlResolver, HtmlParser } from '@angular/compiler';
+import { createSuper } from 'typescript';
 
 
 @Component({
@@ -84,13 +86,25 @@ export class HomeComponent implements OnInit {
   infoTitle = "Personal Information" ;
   infoSubtitle = "Check your personal info";
   infoIco = faInfoCircle;
+
+  btnSubmitTitle = "Submit" ;
   
   public emailInput: String ;
 
   constructor(private http: HttpClient) { 
-    this.emailInput = "Intial value" ;
   }
 
+
+  submitInfo(){
+    this.http.post('http://localhost:5000/helloworld', ' ', {
+      headers: new HttpHeaders({
+        'Content-Type': 'appilcation/json'
+      })
+    })
+    .subscribe(Response => {
+      console.log(Response);
+    });
+  }
   
 
   ngOnInit(): void {
@@ -107,6 +121,16 @@ export class HomeComponent implements OnInit {
       // to hide that loader  
       //document.getElementById("test").innerHTML = result.toString();
     }); 
+
+    /*this.http.post('http://localhost:5000/helloworld', ' ', {
+      headers: new HttpHeaders({
+        'Content-Type': 'appilcation/json'
+      })
+    })
+    .subscribe(Response => {
+      console.log(Response);
+    });
+    */
 
   }
 }
