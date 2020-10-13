@@ -2,9 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { FormControl, Validators } from '@angular/forms';
 import { faFileUpload, faInfoCircle} from '@fortawesome/free-solid-svg-icons';
-import { createAotUrlResolver, HtmlParser } from '@angular/compiler';
-import { createSuper } from 'typescript';
-
 
 @Component({
   selector: 'app-home',
@@ -88,15 +85,44 @@ export class HomeComponent implements OnInit {
   infoIco = faInfoCircle;
 
   btnSubmitTitle = "Submit" ;
-  
-  public emailInput: String ;
+
+  /*
+  fName =  (document.getElementById("first-name") as HTMLInputElement).value;
+  lName = (document.getElementById("last-name") as HTMLInputElement).value ;
+  id = (document.getElementById("id") as HTMLInputElement).value;
+  email = (document.getElementById("email") as HTMLInputElement).value;
+
+  ouput: JSON;
+  obj: any = {
+    'id' : this.id,
+    'fname' : this.fName,
+    'lname' : this.lName,
+    'email' : this.email
+  };
+
+  output = <JSON>this.obj ;
+  */
 
   constructor(private http: HttpClient) { 
   }
 
 
   submitInfo(){
-    this.http.post('http://localhost:5000/helloworld', ' ', {
+    let fName =  (document.getElementById("first-name") as HTMLInputElement).value;
+    let lName = (document.getElementById("last-name") as HTMLInputElement).value ;
+    let id = (document.getElementById("id") as HTMLInputElement).value;
+    let email = (document.getElementById("email") as HTMLInputElement).value;
+
+    let user = {
+      'id' : id,
+      'fname' : fName,
+      'lname' : lName,
+      'email' : email
+    };
+
+    console.log(user);
+
+    this.http.post('http://localhost:5000/helloworld',user, {
       headers: new HttpHeaders({
         'Content-Type': 'appilcation/json'
       })
@@ -108,7 +134,7 @@ export class HomeComponent implements OnInit {
   
 
   ngOnInit(): void {
-    this.http.get('https://project-2-api-hfr.herokuapp.com/helloworld') 
+    /*this.http.get('https://project-2-api-hfr.herokuapp.com/helloworld') 
     .subscribe(Response => { 
       console.log(Response);
       var result = [];
@@ -117,19 +143,8 @@ export class HomeComponent implements OnInit {
         result.push([i,Response[i]]);
       }
       console.log("Array: " + result);
-      // If response comes hideloader() function is called 
-      // to hide that loader  
       //document.getElementById("test").innerHTML = result.toString();
     }); 
-
-    /*this.http.post('http://localhost:5000/helloworld', ' ', {
-      headers: new HttpHeaders({
-        'Content-Type': 'appilcation/json'
-      })
-    })
-    .subscribe(Response => {
-      console.log(Response);
-    });
     */
 
   }
