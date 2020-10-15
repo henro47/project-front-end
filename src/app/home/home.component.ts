@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { FormControl, Validators } from '@angular/forms';
 import { faFileUpload, faInfoCircle} from '@fortawesome/free-solid-svg-icons';
 
@@ -121,6 +121,14 @@ export class HomeComponent implements OnInit {
     };
 
     console.log(user);
+
+    const params = new HttpParams()
+    .set('idNum',id)
+    .set('fName',fName)
+    .set('lName',lName)
+    .set('email',email);
+
+    console.log(params);
 
     this.http.post('http://localhost:5000/user',user, {
       headers: new HttpHeaders({
