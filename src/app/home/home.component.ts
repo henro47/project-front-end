@@ -64,7 +64,6 @@ export class HomeComponent implements OnInit {
           {
             var data = lines[i].split(':');
             (document.getElementById("email") as HTMLInputElement).value = data[1];
-            console.log("email is included" + data[1]);
           }
         }
       };
@@ -112,18 +111,20 @@ export class HomeComponent implements OnInit {
     let lName = (document.getElementById("last-name") as HTMLInputElement).value ;
     let id = (document.getElementById("id") as HTMLInputElement).value;
     let email = (document.getElementById("email") as HTMLInputElement).value;
+    console.log(" Submit info " + email) ;
 
-    let user = {
-      'id' : id,
-      'fname' : fName,
-      'lname' : lName,
-      'email' : email
+    const user = {
+      idNum : id,
+      fName : fName,
+      lName : lName,
+      email : email
     };
 
     console.log(user);
 
-    this.http.post('http://localhost:5000/helloworld',user, {
+    this.http.post('http://localhost:5000/user',user, {
       headers: new HttpHeaders({
+        'Accept' : 'appilcation/json',
         'Content-Type': 'appilcation/json'
       })
     })
