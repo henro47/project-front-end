@@ -112,15 +112,6 @@ export class HomeComponent implements OnInit {
     let id = (document.getElementById("id") as HTMLInputElement).value;
     let userEmail = (document.getElementById("email") as HTMLInputElement).value;
 
-    const user = {
-      idNum : id,
-      fName : firstName,
-      lName : lastName,
-      email : userEmail
-    };
-
-
-    let userString = JSON.stringify(user);
     this.http.post('http://localhost:5000/user', {
       idNum: id,
       fName: firstName,
