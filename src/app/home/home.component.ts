@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams, HttpRequest } from '@angular/common/http';
 import { FormControl, Validators } from '@angular/forms';
 import { faFileUpload, faInfoCircle} from '@fortawesome/free-solid-svg-icons';
 
@@ -107,34 +107,25 @@ export class HomeComponent implements OnInit {
 
 
   submitInfo(){
-    let fName =  (document.getElementById("first-name") as HTMLInputElement).value;
-    let lName = (document.getElementById("last-name") as HTMLInputElement).value ;
+    let firstName =  (document.getElementById("first-name") as HTMLInputElement).value;
+    let lastName = (document.getElementById("last-name") as HTMLInputElement).value ;
     let id = (document.getElementById("id") as HTMLInputElement).value;
-    let email = (document.getElementById("email") as HTMLInputElement).value;
-    console.log(" Submit info " + email) ;
+    let userEmail = (document.getElementById("email") as HTMLInputElement).value;
 
     const user = {
       idNum : id,
-      fName : fName,
-      lName : lName,
-      email : email
+      fName : firstName,
+      lName : lastName,
+      email : userEmail
     };
 
-    console.log(user);
 
-    const params = new HttpParams()
-    .set('idNum',id)
-    .set('fName',fName)
-    .set('lName',lName)
-    .set('email',email);
-
-    console.log(params);
-
-    this.http.post('http://localhost:5000/user',user, {
-      headers: new HttpHeaders({
-        'Accept' : 'appilcation/json',
-        'Content-Type': 'appilcation/json'
-      })
+    let userString = JSON.stringify(user);
+    this.http.post('http://localhost:5000/user', {
+      idNum: id,
+      fName: firstName,
+      lName: lastName,
+      email: userEmail
     })
     .subscribe(Response => {
       console.log(Response);
