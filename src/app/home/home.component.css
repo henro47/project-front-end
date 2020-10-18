@@ -1,0 +1,12 @@
+.form {
+    min-width: 9.3rem;
+    max-width: 13rem;
+    width: 100%;
+    margin: 1rem;
+    padding: 1rem;
+    justify-content: center;
+  }
+  
+  .form-full-width {
+    width: 100%;
+  }
