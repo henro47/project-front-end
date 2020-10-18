@@ -85,23 +85,6 @@ export class HomeComponent implements OnInit {
 
   btnSubmitTitle = "Submit" ;
 
-  /*
-  fName =  (document.getElementById("first-name") as HTMLInputElement).value;
-  lName = (document.getElementById("last-name") as HTMLInputElement).value ;
-  id = (document.getElementById("id") as HTMLInputElement).value;
-  email = (document.getElementById("email") as HTMLInputElement).value;
-
-  ouput: JSON;
-  obj: any = {
-    'id' : this.id,
-    'fname' : this.fName,
-    'lname' : this.lName,
-    'email' : this.email
-  };
-
-  output = <JSON>this.obj ;
-  */
-
   constructor(private http: HttpClient) { 
   }
 
@@ -112,7 +95,7 @@ export class HomeComponent implements OnInit {
     let id = (document.getElementById("id") as HTMLInputElement).value;
     let userEmail = (document.getElementById("email") as HTMLInputElement).value;
 
-    this.http.post('http://localhost:5000/user', {
+    this.http.post('https://project-2-api-hfr.herokuapp.com/user', {
       idNum: id,
       fName: firstName,
       lName: lastName,
