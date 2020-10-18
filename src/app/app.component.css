@@ -59,6 +59,11 @@ html, body{
 
 .flex-row{
     display: flex;
+    flex-direction: row;
+}
+
+.flex-column {
+    display: flex;
     flex-direction: column;
 }
 
@@ -87,6 +92,19 @@ html, body{
     font-size: 2rem;
     position: relative;
 }
+
+.form {
+    min-width: 9.3rem;
+    max-width: 13rem;
+    width: 100%;
+    margin: 1rem;
+    padding: 1rem;
+    justify-content: center;
+  }
+  
+  .form-full-width {
+    width: 100%;
+  }
 
 @media only screen and (max-width: 30.0625rem){
     .flex-row{
