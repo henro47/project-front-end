@@ -26,6 +26,21 @@ export class HomeComponent implements OnInit {
     Validators.minLength(1)
   ]);
 
+  fLastControl = new FormControl('',[
+    Validators.required,
+    Validators.minLength(1)
+  ]);
+
+  fContact = new FormControl('',[
+    Validators.required,
+    Validators.minLength(10)
+  ]);
+
+  fNationality = new FormControl('',[
+    Validators.required,
+    Validators.minLength(2)
+  ]);
+
   csvInputChange(fileInputEvent: any) {
     console.log(fileInputEvent.target.files[0]);
     var file = fileInputEvent.target.files[0] ;
@@ -60,10 +75,16 @@ export class HomeComponent implements OnInit {
             (document.getElementById("id") as HTMLInputElement).value = data[1];
           }
 
-          if(lines[i].includes('email'))
+          if(lines[i].includes('contact') || lines[i].includes('number'))
           {
             var data = lines[i].split(':');
-            (document.getElementById("email") as HTMLInputElement).value = data[1];
+            (document.getElementById("contact") as HTMLInputElement).value = data[1];
+          }
+
+          if(lines[i].includes('nat') || lines[i].includes('origin'))
+          {
+            var data = lines[i].split(':');
+            (document.getElementById("nat") as HTMLInputElement).value = data[1];
           }
         }
       };
@@ -93,13 +114,15 @@ export class HomeComponent implements OnInit {
     let firstName =  (document.getElementById("first-name") as HTMLInputElement).value;
     let lastName = (document.getElementById("last-name") as HTMLInputElement).value ;
     let id = (document.getElementById("id") as HTMLInputElement).value;
-    let userEmail = (document.getElementById("email") as HTMLInputElement).value;
+    let con = (document.getElementById("contact") as HTMLInputElement).value;
+    let nat = (document.getElementById("nat") as HTMLInputElement).value;
 
     this.http.post('https://project-2-api-hfr.herokuapp.com/user', {
       idNum: id,
       fName: firstName,
       lName: lastName,
-      email: userEmail
+      contact: con,
+      national: nat
     })
     .subscribe(Response => {
       console.log(Response);
