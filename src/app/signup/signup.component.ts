@@ -3,7 +3,6 @@ import { FormControl, Validators } from '@angular/forms';
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { HttpClient } from '@angular/common/http';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import { ThrowStmt } from '@angular/compiler';
 
 @Component({
   selector: 'app-signup',
