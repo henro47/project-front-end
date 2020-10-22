@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Type } from '@angular/core';
 import { faSignInAlt } from '@fortawesome/free-solid-svg-icons';
 import { FormControl, Validators } from '@angular/forms';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient} from '@angular/common/http';
 import {MatSnackBar} from '@angular/material/snack-bar';
-
 
 @Component({
   selector: 'app-login',
@@ -29,6 +28,7 @@ export class LoginComponent implements OnInit {
   loginIco = faSignInAlt;
   btnLogin = "Login";
   btnSignUp = "Sign Up";
+  routerLink = "/";
 
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
@@ -47,10 +47,21 @@ export class LoginComponent implements OnInit {
               password: userPassword
             },)
             .subscribe(Response => {
-              console.log(Response)
-              this.openSnackBar(Response.toString(),"Close");
-              localStorage.setItem('token',Response.toString());
-            });
+              console.log(Response);
+             
+              var result = [];
+              for(var i in Response)
+              {
+                result.push([i,Response[i]]);
+              }
+              console.log(result[1][1]);
+              if(result[0][1].toString().includes('success'))
+              {
+                localStorage.setItem('token',result[1][1]);
+                this.openSnackBar("logged in successfully!","Close");
+                this.routerLink = '/home';
+              }
+    });
   }
 
   ngOnInit(): void {
