@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams, HttpRequest } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormControl, Validators } from '@angular/forms';
 import { faFileUpload, faInfoCircle} from '@fortawesome/free-solid-svg-icons';
 
@@ -24,6 +24,21 @@ export class HomeComponent implements OnInit {
   fNameControl = new FormControl('',[
     Validators.required,
     Validators.minLength(1)
+  ]);
+
+  fLastControl = new FormControl('',[
+    Validators.required,
+    Validators.minLength(1)
+  ]);
+
+  fContact = new FormControl('',[
+    Validators.required,
+    Validators.minLength(10)
+  ]);
+
+  fNationality = new FormControl('',[
+    Validators.required,
+    Validators.minLength(2)
   ]);
 
   csvInputChange(fileInputEvent: any) {
@@ -60,10 +75,16 @@ export class HomeComponent implements OnInit {
             (document.getElementById("id") as HTMLInputElement).value = data[1];
           }
 
-          if(lines[i].includes('email'))
+          if(lines[i].includes('contact') || lines[i].includes('number'))
           {
             var data = lines[i].split(':');
-            (document.getElementById("email") as HTMLInputElement).value = data[1];
+            (document.getElementById("contact") as HTMLInputElement).value = data[1];
+          }
+
+          if(lines[i].includes('nat') || lines[i].includes('origin'))
+          {
+            var data = lines[i].split(':');
+            (document.getElementById("nat") as HTMLInputElement).value = data[1];
           }
         }
       };
@@ -93,14 +114,29 @@ export class HomeComponent implements OnInit {
     let firstName =  (document.getElementById("first-name") as HTMLInputElement).value;
     let lastName = (document.getElementById("last-name") as HTMLInputElement).value ;
     let id = (document.getElementById("id") as HTMLInputElement).value;
-    let userEmail = (document.getElementById("email") as HTMLInputElement).value;
+    let con = (document.getElementById("contact") as HTMLInputElement).value;
+    let nat = (document.getElementById("nat") as HTMLInputElement).value;
 
-    this.http.post('https://project-2-api-hfr.herokuapp.com/user', {
-      idNum: id,
-      fName: firstName,
-      lName: lastName,
-      email: userEmail
-    })
+    let userEmail = localStorage.getItem('email');
+    let token = 'Bearer ' ;
+    token += localStorage.getItem('token'); 
+
+    let httpHeaders = new HttpHeaders()
+    .set('Authorization', token);
+
+    console.log("Email:" + userEmail +"\nToken:" + token);
+
+    var data = [
+      {'propName' : 'idNum', 'value': id},
+      {'propName' : 'fName', 'value': firstName},
+      {'propName' : 'lName', 'value': lastName},
+      {'propName' : 'contact', 'value': con},
+      {'propName' : 'national', 'value': nat}
+    ]
+
+    console.log("data:" + data);
+
+    this.http.patch('http://localhost:5000/user/'+ userEmail, data ,{headers: httpHeaders})
     .subscribe(Response => {
       console.log(Response);
     });

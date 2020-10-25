@@ -11,7 +11,7 @@
                 <form class="form">
                 <mat-form-field class="form-full-width">
                     <mat-label>Email Address</mat-label>
-                    <input id="last-name" matInput [formControl]="fUsernameControl" placeholder="examle@gmail.com">
+                    <input id="username" matInput [formControl]="fUsernameControl" placeholder="examle@gmail.com">
                     <mat-error *ngIf="fUsernameControl.hasError('email') && !fUsernameControl.hasError('required')">
                         Please enter a valid username/email
                       </mat-error>
@@ -26,7 +26,7 @@
                 <form class="form">
                     <mat-form-field class="form-full-width">
                         <mat-label>Password</mat-label>
-                        <input id="last-name" matInput [formControl]="fPasswordControl">
+                        <input id="password" matInput [formControl]="fPasswordControl">
                         <mat-error *ngIf="!fUsernameControl.hasError('required')">
                             Please enter a valid password
                         </mat-error>
@@ -34,8 +34,7 @@
                     </form>
 
                 <div id="buttons" class="flex-center flex-row">
-                    
-                    <button id="login-btn"mat-raised-button class="btn" routerLink="/home">{{btnLogin}}</button>
+                    <button id="login-btn"mat-raised-button class="btn" (click)="login()">{{btnLogin}}</button>
                     <button id="signup-btn"mat-raised-button class="btn" routerLink="/signup">{{btnSignUp}}</button>
                 </div>
             </mat-card-content>
