@@ -49,7 +49,7 @@ export class SignupComponent implements OnInit {
         {
           if(userPassword.match(confirm))
           {
-            this.http.post('http://localhost:5000/user/signup',{
+            this.http.post('https://project-2-api-hfr.herokuapp.com/user/signup',{
               email: userEmail,
               password: userPassword
             })
