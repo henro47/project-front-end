@@ -124,8 +124,6 @@ export class HomeComponent implements OnInit {
     let httpHeaders = new HttpHeaders()
     .set('Authorization', token);
 
-    console.log("Email:" + userEmail +"\nToken:" + token);
-
     var data = [
       {'propName' : 'idNum', 'value': id},
       {'propName' : 'fName', 'value': firstName},
@@ -136,7 +134,7 @@ export class HomeComponent implements OnInit {
 
     console.log("data:" + data);
 
-    this.http.patch('http://localhost:5000/user/'+ userEmail, data ,{headers: httpHeaders})
+    this.http.patch('https://project-2-api-hfr.herokuapp.com/user'+ userEmail, data ,{headers: httpHeaders})
     .subscribe(Response => {
       console.log(Response);
     });

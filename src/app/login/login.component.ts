@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit {
     let userEmail =  (document.getElementById("username") as HTMLInputElement).value;
     let userPassword =  (document.getElementById("password") as HTMLInputElement).value;
 
-    this.http.post('http://localhost:5000/user/login',{
+    this.http.post('https://project-2-api-hfr.herokuapp.com/user/login',{
               email: userEmail,
               password: userPassword
             },)
