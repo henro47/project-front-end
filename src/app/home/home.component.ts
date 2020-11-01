@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormControl, Validators } from '@angular/forms';
 import { faFileUpload, faInfoCircle} from '@fortawesome/free-solid-svg-icons';
+import { findReadVarNames } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-home',
@@ -41,7 +42,42 @@ export class HomeComponent implements OnInit {
     Validators.minLength(2)
   ]);
 
-  csvInputChange(fileInputEvent: any) {
+  validateID(idNumber:String)
+  {
+    var evenSum = "";
+    var oddSum = 0 ;
+    let multiSum = 0 ;
+    for(let i =0;i<idNumber.length-1;i++)
+    {
+      var numAtIndex = parseInt(idNumber[i]);
+      if(i%2 ==0)
+      {
+        oddSum += numAtIndex;
+      }
+      else
+      {
+        evenSum += numAtIndex
+        console.log(evenSum);
+      }
+    }
+
+    multiSum = parseInt(evenSum) * 2 ;
+    let finalSum = 0 ;
+
+    for(let i =0; i< multiSum.toString().length;i++)
+    {
+      var numAtIndex = parseInt(multiSum.toString()[i]);
+      finalSum += numAtIndex;
+    }
+
+    if((oddSum + finalSum)%10==0)
+    {
+      return true;
+    }
+    return false;
+  }
+
+  inputChange(fileInputEvent: any) {
     console.log(fileInputEvent.target.files[0]);
     var file = fileInputEvent.target.files[0] ;
     var reader = new FileReader();
@@ -111,33 +147,43 @@ export class HomeComponent implements OnInit {
 
 
   submitInfo(){
-    let firstName =  (document.getElementById("first-name") as HTMLInputElement).value;
-    let lastName = (document.getElementById("last-name") as HTMLInputElement).value ;
-    let id = (document.getElementById("id") as HTMLInputElement).value;
-    let con = (document.getElementById("contact") as HTMLInputElement).value;
-    let nat = (document.getElementById("nat") as HTMLInputElement).value;
+    let firstName =  " " ;
+    let lastName = " " ;
+    let id = " " ;
+    let con = " " ;
+    let nat = " " ;
+    
+    firstName = (document.getElementById("first-name") as HTMLInputElement).value ;
+    lastName = (document.getElementById("last-name") as HTMLInputElement).value ;
+    id = (document.getElementById("id") as HTMLInputElement).value ;
+    con = (document.getElementById("contact") as HTMLInputElement).value ;
+    nat = (document.getElementById("nat") as HTMLInputElement).value ;
 
-    let userEmail = localStorage.getItem('email');
-    let token = 'Bearer ' ;
-    token += localStorage.getItem('token'); 
-
-    let httpHeaders = new HttpHeaders()
-    .set('Authorization', token);
-
-    var data = [
-      {'propName' : 'idNum', 'value': id},
-      {'propName' : 'fName', 'value': firstName},
-      {'propName' : 'lName', 'value': lastName},
-      {'propName' : 'contact', 'value': con},
-      {'propName' : 'national', 'value': nat}
-    ]
-
-    console.log("data:" + data);
-
-    this.http.patch('https://project-2-api-hfr.herokuapp.com/user'+ userEmail, data ,{headers: httpHeaders})
-    .subscribe(Response => {
-      console.log(Response);
-    });
+    if(this.validateID(id))
+    {
+      let userEmail = localStorage.getItem('email');
+      let token = 'Bearer ' ;
+      token += localStorage.getItem('token'); 
+  
+      let httpHeaders = new HttpHeaders()
+      .set('Authorization', token);
+  
+      var data = [
+        {'propName' : 'idNum', 'value': id},
+        {'propName' : 'fName', 'value': firstName},
+        {'propName' : 'lName', 'value': lastName},
+        {'propName' : 'contact', 'value': con},
+        {'propName' : 'national', 'value': nat}
+      ]
+  
+      console.log("data:" + data);
+      console.log('ID IS VALID');
+  
+      this.http.patch('https://project-2-api-hfr.herokuapp.com/user/'+ userEmail, data ,{headers: httpHeaders})
+      .subscribe(Response => {
+        console.log(Response);
+      });
+    }
   }
   
 

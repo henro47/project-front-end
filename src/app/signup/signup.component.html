@@ -26,7 +26,7 @@
                 <form class="form">
                     <mat-form-field class="form-full-width">
                         <mat-label>Password</mat-label>
-                        <input id="password" matInput [formControl]="fPasswordControl">
+                        <input id="password" matInput [formControl]="fPasswordControl"  [type]="'password'">
                         <mat-error *ngIf="fPasswordControl.hasError('minLength') && !fPasswordControl.hasError('required')">
                             Password minimum lenght of 8 characters.
                         </mat-error>
@@ -40,8 +40,8 @@
 
                 <form class="form">
                     <mat-form-field class="form-full-width">
-                        <mat-label>Password</mat-label>
-                        <input id="confirm-password" matInput [formControl]="fConfirmPWdControl">
+                        <mat-label>Confirm Password</mat-label>
+                        <input id="confirm-password" matInput [formControl]="fConfirmPWdControl" [type]="'password'">
                         <mat-error *ngIf="fConfirmPWdControl.hasError('minLength') && !fConfirmPWdControl.hasError('required')">
                             Password minimum lenght of 8 characters.
                         </mat-error>
