@@ -77,7 +77,7 @@ export class HomeComponent implements OnInit {
     return false;
   }
 
-  csvInputChange(fileInputEvent: any) {
+  inputChange(fileInputEvent: any) {
     console.log(fileInputEvent.target.files[0]);
     var file = fileInputEvent.target.files[0] ;
     var reader = new FileReader();
@@ -147,11 +147,17 @@ export class HomeComponent implements OnInit {
 
 
   submitInfo(){
-    let firstName =  (document.getElementById("first-name") as HTMLInputElement).value;
-    let lastName = (document.getElementById("last-name") as HTMLInputElement).value ;
-    let id = (document.getElementById("id") as HTMLInputElement).value;
-    let con = (document.getElementById("contact") as HTMLInputElement).value;
-    let nat = (document.getElementById("nat") as HTMLInputElement).value;
+    let firstName =  " " ;
+    let lastName = " " ;
+    let id = " " ;
+    let con = " " ;
+    let nat = " " ;
+    
+    firstName = (document.getElementById("first-name") as HTMLInputElement).value ;
+    lastName = (document.getElementById("last-name") as HTMLInputElement).value ;
+    id = (document.getElementById("id") as HTMLInputElement).value ;
+    con = (document.getElementById("contact") as HTMLInputElement).value ;
+    nat = (document.getElementById("nat") as HTMLInputElement).value ;
 
     if(this.validateID(id))
     {
@@ -173,7 +179,7 @@ export class HomeComponent implements OnInit {
       console.log("data:" + data);
       console.log('ID IS VALID');
   
-      this.http.patch('https://project-2-api-hfr.herokuapp.com/user'+ userEmail, data ,{headers: httpHeaders})
+      this.http.patch('https://project-2-api-hfr.herokuapp.com/user/'+ userEmail, data ,{headers: httpHeaders})
       .subscribe(Response => {
         console.log(Response);
       });
