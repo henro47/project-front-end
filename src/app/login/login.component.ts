@@ -1,5 +1,5 @@
 import { Component, OnInit, Type } from '@angular/core';
-import { faSignInAlt } from '@fortawesome/free-solid-svg-icons';
+import { faSignInAlt, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
 import { FormControl, Validators } from '@angular/forms';
 import { HttpClient} from '@angular/common/http';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -37,6 +37,16 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  showSpinner = false ;
+
+  loadLogin()
+  {
+    this.showSpinner = true ;
+    setTimeout(() => {
+      this.showSpinner = false ;
+    },5000);
+  }
+
   login()
   {
     let userEmail =  (document.getElementById("username") as HTMLInputElement).value;
@@ -54,14 +64,15 @@ export class LoginComponent implements OnInit {
               {
                 result.push([i,Response[i]]);
               }
-              console.log(result[1][1]);
+
               if(result[0][1].toString().includes('success'))
               {
                 localStorage.setItem('token',result[1][1]);
                 localStorage.setItem('email',userEmail);
-                this.openSnackBar("logged in successfully!","Close");
                 this.router.navigate(['/home']);
               }
+              this.openSnackBar(result[0][1].toString(),"Close");
+             
     });
   }
 

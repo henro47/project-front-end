@@ -1,3 +1,4 @@
+import { AuthGuardService } from './services/auth-guard.service'
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { HomeComponent } from './home/home.component';
 import { SignupComponent } from './signup/signup.component';
@@ -9,7 +10,7 @@ const routes: Routes = [
   {path: '',  redirectTo: '/login', pathMatch: 'full'},
   {path: 'login', component: LoginComponent},
   {path: 'signup', component: SignupComponent},
-  {path: 'home', component: HomeComponent},
+  {path: 'home', component: HomeComponent, canActivate: [AuthGuardService]},
   {path : "**", component: PageNotFoundComponent}
 ];
 
