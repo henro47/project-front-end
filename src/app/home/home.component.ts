@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormControl, Validators } from '@angular/forms';
 import { faFileUpload, faInfoCircle} from '@fortawesome/free-solid-svg-icons';
 import {idNumberValidator} from '../validators/id-number.validator';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-home',
@@ -10,11 +11,6 @@ import {idNumberValidator} from '../validators/id-number.validator';
   styleUrls: ['./home.component.css','../app.component.css']
 })
 export class HomeComponent implements OnInit {
-  emailFormControl = new FormControl('', [
-    Validators.required,
-    Validators.email,
-  ]);
-
   fIDNumberControl = new FormControl('',[
     Validators.required,
     idNumberValidator
@@ -39,41 +35,6 @@ export class HomeComponent implements OnInit {
     Validators.required,
     Validators.minLength(2)
   ]);
-
-  validateID(idNumber:String)
-  {
-    var evenSum = "";
-    var oddSum = 0 ;
-    let multiSum = 0 ;
-    for(let i =0;i<idNumber.length-1;i++)
-    {
-      var numAtIndex = parseInt(idNumber[i]);
-      if(i%2 ==0)
-      {
-        oddSum += numAtIndex;
-      }
-      else
-      {
-        evenSum += numAtIndex
-        console.log(evenSum);
-      }
-    }
-
-    multiSum = parseInt(evenSum) * 2 ;
-    let finalSum = 0 ;
-
-    for(let i =0; i< multiSum.toString().length;i++)
-    {
-      var numAtIndex = parseInt(multiSum.toString()[i]);
-      finalSum += numAtIndex;
-    }
-
-    if((oddSum + finalSum)%10==0)
-    {
-      return true;
-    }
-    return false;
-  }
 
   inputChange(fileInputEvent: any) {
     console.log(fileInputEvent.target.files[0]);
@@ -122,7 +83,6 @@ export class HomeComponent implements OnInit {
           }
         }
       };
-    
       reader.onerror = function() {
         console.log(reader.error);
       };
@@ -140,9 +100,14 @@ export class HomeComponent implements OnInit {
 
   btnSubmitTitle = "Submit" ;
 
-  constructor(private http: HttpClient) { 
+  constructor(private http: HttpClient, private _snackBar: MatSnackBar) { 
   }
 
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 2000,
+    });
+  }
 
   submitInfo(){
     let firstName =  " " ;
@@ -157,47 +122,85 @@ export class HomeComponent implements OnInit {
     con = (document.getElementById("contact") as HTMLInputElement).value ;
     nat = (document.getElementById("nat") as HTMLInputElement).value ;
 
-    if(this.validateID(id))
+    this.fIDNumberControl.setValue(id);
+    this.fNameControl.setValue(firstName);
+    this.fLastControl.setValue(lastName);
+    this.fContact.setValue(con);
+    this.fNationality.setValue(nat);
+
+    if(this.fIDNumberControl.valid)
     {
-      let userEmail = localStorage.getItem('email');
-      let token = 'Bearer ' ;
-      token += localStorage.getItem('token'); 
-  
-      let httpHeaders = new HttpHeaders()
-      .set('Authorization', token);
-  
-      var data = [
-        {'propName' : 'idNum', 'value': id},
-        {'propName' : 'fName', 'value': firstName},
-        {'propName' : 'lName', 'value': lastName},
-        {'propName' : 'contact', 'value': con},
-        {'propName' : 'national', 'value': nat}
-      ]
-  
-      console.log("data:" + data);
-      console.log('ID IS VALID');
-  
-      this.http.patch('https://project-2-api-hfr.herokuapp.com/user/'+ userEmail, data ,{headers: httpHeaders})
-      .subscribe(Response => {
-        console.log(Response);
-      });
+      if(this.fNameControl.valid)
+      {
+        if(this.fLastControl.valid)
+        {
+          if(this.fContact.valid)
+          {
+            if(this.fNationality.valid)
+            {
+              let userEmail = localStorage.getItem('email');
+              let token = 'Bearer ' ;
+              token += localStorage.getItem('token'); 
+          
+              let httpHeaders = new HttpHeaders()
+              .set('Authorization', token);
+          
+              var data = [
+                {'propName' : 'idNum', 'value': id},
+                {'propName' : 'fName', 'value': firstName},
+                {'propName' : 'lName', 'value': lastName},
+                {'propName' : 'contact', 'value': con},
+                {'propName' : 'national', 'value': nat}
+              ]
+          
+              console.log("data:" + data);
+              console.log('ID IS VALID');
+          
+              this.http.patch('https://project-2-api-hfr.herokuapp.com/user/'+ userEmail, data ,{headers: httpHeaders})
+              .subscribe(Response => {
+                console.log(Response);
+
+                var result = [];
+                for(var i in Response)
+                {
+                  result.push([i,Response[i]]);
+                }
+                console.log(result);
+                if(result[0][1].toString().includes('success'))
+                {
+                  localStorage.setItem('token',result[1][1]);
+                  localStorage.setItem('email',userEmail);
+                }
+                this.openSnackBar(result[0][1].toString(),"Close");
+              });
+            }
+            else
+            {
+              this.openSnackBar("Please provide your nationality","Close");
+            }
+          }
+          else
+          {
+            this.openSnackBar("Please provide your contact number","Close");
+          }
+        }
+        else
+        {
+          this.openSnackBar("Please provide your last name","Close");
+        }
+      }
+      else
+      {
+        this.openSnackBar("Please provide your first name","Close");
+      }
+    }
+    else
+    {
+      this.openSnackBar("Please provide your identification number (RSA)","Close");
     }
   }
   
 
   ngOnInit(): void {
-    /*this.http.get('https://project-2-api-hfr.herokuapp.com/helloworld') 
-    .subscribe(Response => { 
-      console.log(Response);
-      var result = [];
-      for(var i in Response)
-      {
-        result.push([i,Response[i]]);
-      }
-      console.log("Array: " + result);
-      //document.getElementById("test").innerHTML = result.toString();
-    }); 
-    */
-
   }
 }
