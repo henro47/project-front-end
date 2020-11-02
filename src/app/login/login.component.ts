@@ -1,5 +1,5 @@
 import { Component, OnInit, Type } from '@angular/core';
-import { faSignInAlt } from '@fortawesome/free-solid-svg-icons';
+import { faSignInAlt, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
 import { FormControl, Validators } from '@angular/forms';
 import { HttpClient} from '@angular/common/http';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -35,6 +35,16 @@ export class LoginComponent implements OnInit {
     this._snackBar.open(message, action, {
       duration: 2000,
     });
+  }
+
+  showSpinner = false ;
+
+  loadLogin()
+  {
+    this.showSpinner = true ;
+    setTimeout(() => {
+      this.showSpinner = false ;
+    },5000);
   }
 
   login()
