@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormControl, Validators } from '@angular/forms';
 import { faFileUpload, faInfoCircle} from '@fortawesome/free-solid-svg-icons';
-import { findReadVarNames } from '@angular/compiler/src/output/output_ast';
+import {idNumberValidator} from '../validators/id-number.validator';
 
 @Component({
   selector: 'app-home',
@@ -10,7 +10,6 @@ import { findReadVarNames } from '@angular/compiler/src/output/output_ast';
   styleUrls: ['./home.component.css','../app.component.css']
 })
 export class HomeComponent implements OnInit {
-
   emailFormControl = new FormControl('', [
     Validators.required,
     Validators.email,
@@ -18,8 +17,7 @@ export class HomeComponent implements OnInit {
 
   fIDNumberControl = new FormControl('',[
     Validators.required,
-    Validators.minLength(13),
-    Validators.maxLength(13)
+    idNumberValidator
   ]);
 
   fNameControl = new FormControl('',[

@@ -26,7 +26,7 @@
               <mat-form-field class="form-full-width">
                 <mat-label>Identification Number(RSA)</mat-label>
                 <input id="id" matInput [formControl]="fIDNumberControl" placeholder="1234567890123">
-                <mat-error *ngIf="fIDNumberControl.hasError('minLength') && !fIDNumberControl.hasError('required') && !fIDNumberControl.hasError('maxLength')" >
+                <mat-error *ngIf="fIDNumberControl.hasError('idValidation') && !fIDNumberControl.hasError('required')" >
                   Please enter a valid id number
                 </mat-error>
                 <mat-error *ngIf="fIDNumberControl.hasError('required')">
