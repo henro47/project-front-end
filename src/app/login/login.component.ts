@@ -64,14 +64,15 @@ export class LoginComponent implements OnInit {
               {
                 result.push([i,Response[i]]);
               }
-              console.log(result[1][1]);
+
               if(result[0][1].toString().includes('success'))
               {
                 localStorage.setItem('token',result[1][1]);
                 localStorage.setItem('email',userEmail);
-                this.openSnackBar("logged in successfully!","Close");
                 this.router.navigate(['/home']);
               }
+              this.openSnackBar(result[0][1].toString(),"Close");
+             
     });
   }
 
