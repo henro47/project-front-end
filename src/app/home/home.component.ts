@@ -4,6 +4,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { faFileUpload, faInfoCircle} from '@fortawesome/free-solid-svg-icons';
 import {idNumberValidator} from '../validators/id-number.validator';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 
 @Component({
   selector: 'app-home',
@@ -36,61 +37,57 @@ export class HomeComponent implements OnInit {
     Validators.minLength(2)
   ]);
 
+  readText(reader: FileReader)
+  {
+    reader.onload = function() {
+      console.log(reader.result);
+      var lines = reader.result.toString().split('\n');
+      for(let i = 0; i <lines.length;i++)
+      {
+        var data = lines[i].split(':');
+        if(lines[i].includes('first'))
+        {
+          (document.getElementById("first-name") as HTMLInputElement).value = data[1];
+        }
+
+        if(lines[i].includes('last'))
+        {
+          (document.getElementById("last-name") as HTMLInputElement).value = data[1];
+        }
+
+        if(lines[i].includes('id'))
+        {
+          (document.getElementById("id") as HTMLInputElement).value = data[1];
+        }
+
+        if(lines[i].includes('contact') || lines[i].includes('number'))
+        {
+          (document.getElementById("contact") as HTMLInputElement).value = data[1];
+        }
+
+        if(lines[i].includes('nat') || lines[i].includes('origin'))
+        {
+          (document.getElementById("nat") as HTMLInputElement).value = data[1];
+        }
+      }
+    };
+    reader.onerror = function() {
+      console.log(reader.error);
+    };
+  }
   
-
   inputChange(fileInputEvent: any) {
-    console.log(fileInputEvent.target.files[0]);
     var file = fileInputEvent.target.files[0] ;
-    var reader = new FileReader();
-
-    /*
     if(file != null)
     {
-      reader.readAsText(file);
-
-      reader.onload = function() {
-        console.log(reader.result);
-        var lines = reader.result.toString().split('\n');
-        for(let i = 0; i <lines.length;i++)
-        {
-          if(lines[i].includes('first'))
-          {
-            
-            var data = lines[i].split(':');
-            (document.getElementById("first-name") as HTMLInputElement).value = data[1];
-          }
-
-          if(lines[i].includes('last'))
-          {
-            
-            var data = lines[i].split(':');
-            (document.getElementById("last-name") as HTMLInputElement).value = data[1];
-          }
-
-          if(lines[i].includes('id'))
-          {
-            var data = lines[i].split(':');
-            (document.getElementById("id") as HTMLInputElement).value = data[1];
-          }
-
-          if(lines[i].includes('contact') || lines[i].includes('number'))
-          {
-            var data = lines[i].split(':');
-            (document.getElementById("contact") as HTMLInputElement).value = data[1];
-          }
-
-          if(lines[i].includes('nat') || lines[i].includes('origin'))
-          {
-            var data = lines[i].split(':');
-            (document.getElementById("nat") as HTMLInputElement).value = data[1];
-          }
-        }
-      };
-      reader.onerror = function() {
-        console.log(reader.error);
-      };
+      if(file.name.toString().includes('.txt') || file.name.toString().includes('.csv'))
+      {
+        var reader = new FileReader();
+        reader.readAsText(file);
+        console.log(file.name);
+        this.readText(reader);
+      }
     }   
-    */ 
   };
 
   uploadTitle = "Upload" ;
