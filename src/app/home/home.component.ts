@@ -36,11 +36,14 @@ export class HomeComponent implements OnInit {
     Validators.minLength(2)
   ]);
 
+  
+
   inputChange(fileInputEvent: any) {
     console.log(fileInputEvent.target.files[0]);
     var file = fileInputEvent.target.files[0] ;
     var reader = new FileReader();
 
+    /*
     if(file != null)
     {
       reader.readAsText(file);
@@ -86,7 +89,8 @@ export class HomeComponent implements OnInit {
       reader.onerror = function() {
         console.log(reader.error);
       };
-    }    
+    }   
+    */ 
   };
 
   uploadTitle = "Upload" ;
@@ -202,5 +206,6 @@ export class HomeComponent implements OnInit {
   
 
   ngOnInit(): void {
+
   }
 }
