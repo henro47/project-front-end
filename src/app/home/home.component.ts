@@ -45,37 +45,31 @@ export class HomeComponent implements OnInit {
 
   getUserDataFromFile(dataArray)
   {
-    //(document.getElementById("first-name") as HTMLInputElement).value = dataArray[i][1];
     for(let i = 0; i<dataArray.length; i++)
     {
       
       if(dataArray[i][0].toString().includes('id'))
       {
-        //(document.getElementById("id") as HTMLInputElement).value = dataArray[i][1];
         this.fIDNumberControl.setValue(dataArray[i][1]);
       }
 
       if(dataArray[i][0].toString().includes('first'))
       {
-        //(document.getElementById("first-name") as HTMLInputElement).value = dataArray[i][1];
         this.fNameControl.setValue(dataArray[i][1]);
       }
       
       if(dataArray[i][0].includes('last'))
       {
-        //(document.getElementById("last-name") as HTMLInputElement).value = dataArray[i][1];
         this.fLastControl.setValue(dataArray[i][1]);
       }
 
       if(dataArray[i][0].includes('contact') || dataArray[i][0].includes('number'))
       {
-        //(document.getElementById("contact") as HTMLInputElement).value = dataArray[i][1];
         this.fContact.setValue(dataArray[i][1]);
       }
 
       if(dataArray[i][0].includes('nat') || dataArray[i][0].includes('origin'))
       {
-        //(document.getElementById("nat") as HTMLInputElement).value = dataArray[i][1];
         this.fNationality.setValue(dataArray[i][1]);
       }
     }
@@ -104,8 +98,10 @@ export class HomeComponent implements OnInit {
         {
           result.push([i,Response[i]]);
         }
+        
         if(result[0][1].toString().includes('success'))
         {
+          this.load();
           var userData = Object.entries(result[1][1]);
           this.getUserDataFromFile(userData);
           this.showInputs();
@@ -128,6 +124,17 @@ export class HomeComponent implements OnInit {
 
   constructor(private http: HttpClient, private _snackBar: MatSnackBar) { 
   }
+
+  showSpinner = false ;
+
+  load()
+  {
+    this.showSpinner = true ;
+    setTimeout(() => {
+      this.showSpinner = false ;
+    },5000);
+  }
+
 
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
