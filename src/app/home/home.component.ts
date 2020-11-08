@@ -51,27 +51,32 @@ export class HomeComponent implements OnInit {
       
       if(dataArray[i][0].toString().includes('id'))
       {
-        (document.getElementById("id") as HTMLInputElement).value = dataArray[i][1];
+        //(document.getElementById("id") as HTMLInputElement).value = dataArray[i][1];
+        this.fIDNumberControl.setValue(dataArray[i][1]);
       }
 
       if(dataArray[i][0].toString().includes('first'))
       {
-        (document.getElementById("first-name") as HTMLInputElement).value = dataArray[i][1];
+        //(document.getElementById("first-name") as HTMLInputElement).value = dataArray[i][1];
+        this.fNameControl.setValue(dataArray[i][1]);
       }
       
       if(dataArray[i][0].includes('last'))
       {
-        (document.getElementById("last-name") as HTMLInputElement).value = dataArray[i][1];
+        //(document.getElementById("last-name") as HTMLInputElement).value = dataArray[i][1];
+        this.fLastControl.setValue(dataArray[i][1]);
       }
 
       if(dataArray[i][0].includes('contact') || dataArray[i][0].includes('number'))
       {
-        (document.getElementById("contact") as HTMLInputElement).value = dataArray[i][1];
+        //(document.getElementById("contact") as HTMLInputElement).value = dataArray[i][1];
+        this.fContact.setValue(dataArray[i][1]);
       }
 
       if(dataArray[i][0].includes('nat') || dataArray[i][0].includes('origin'))
       {
-        (document.getElementById("nat") as HTMLInputElement).value = dataArray[i][1];
+        //(document.getElementById("nat") as HTMLInputElement).value = dataArray[i][1];
+        this.fNationality.setValue(dataArray[i][1]);
       }
     }
   }
@@ -99,9 +104,13 @@ export class HomeComponent implements OnInit {
         {
           result.push([i,Response[i]]);
         }
-        var userData = Object.entries(result[1][1]);
-        this.getUserDataFromFile(userData);
-        this.showInputs();
+        if(result[0][1].toString().includes('success'))
+        {
+          var userData = Object.entries(result[1][1]);
+          this.getUserDataFromFile(userData);
+          this.showInputs();
+          this.openSnackBar(result[0][1].toString(),"Close");
+        }
       });
     }   
   };
@@ -127,24 +136,6 @@ export class HomeComponent implements OnInit {
   }
 
   submitInfo(){
-    let firstName =  " " ;
-    let lastName = " " ;
-    let id = " " ;
-    let con = " " ;
-    let nat = " " ;
-    
-    firstName = (document.getElementById("first-name") as HTMLInputElement).value ;
-    lastName = (document.getElementById("last-name") as HTMLInputElement).value ;
-    id = (document.getElementById("id") as HTMLInputElement).value ;
-    con = (document.getElementById("contact") as HTMLInputElement).value ;
-    nat = (document.getElementById("nat") as HTMLInputElement).value ;
-
-    this.fIDNumberControl.setValue(id);
-    this.fNameControl.setValue(firstName);
-    this.fLastControl.setValue(lastName);
-    this.fContact.setValue(con);
-    this.fNationality.setValue(nat);
-
     if(this.fIDNumberControl.valid)
     {
       if(this.fNameControl.valid)
@@ -163,15 +154,12 @@ export class HomeComponent implements OnInit {
               .set('Authorization', token);
           
               var data = [
-                {'propName' : 'idNum', 'value': id},
-                {'propName' : 'fName', 'value': firstName},
-                {'propName' : 'lName', 'value': lastName},
-                {'propName' : 'contact', 'value': con},
-                {'propName' : 'national', 'value': nat}
-              ]
-          
-              console.log("data" + data);
-              console.log('ID IS VALID');
+                {'propName' : 'idNum', 'value': this.fIDNumberControl.value},
+                {'propName' : 'fName', 'value': this.fNameControl.value},
+                {'propName' : 'lName', 'value': this.fLastControl.value},
+                {'propName' : 'contact', 'value': this.fContact.value},
+                {'propName' : 'national', 'value': this.fNationality.value}
+              ]     
           
               this.http.patch('https://project-2-api-hfr.herokuapp.com/user/'+ userEmail, data ,{headers: httpHeaders})
               .subscribe(Response => {
@@ -183,7 +171,7 @@ export class HomeComponent implements OnInit {
                   result.push([i,Response[i]]);
                 }
                 console.log(result);
-                if(result[0][1].toString().includes('success'))
+                if(result[0][0].toString().includes('success'))
                 {
                   localStorage.setItem('token',result[1][1]);
                   localStorage.setItem('email',userEmail);
