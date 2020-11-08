@@ -37,56 +37,65 @@ export class HomeComponent implements OnInit {
     Validators.minLength(2)
   ]);
 
-  readText(reader: FileReader)
+  getUserDataFromFile(dataArray)
   {
-    reader.onload = function() {
-      console.log(reader.result);
-      var lines = reader.result.toString().split('\n');
-      for(let i = 0; i <lines.length;i++)
+    //(document.getElementById("first-name") as HTMLInputElement).value = dataArray[i][1];
+    for(let i = 0; i<dataArray.length; i++)
+    {
+      
+      if(dataArray[i][0].toString().includes('id'))
       {
-        var data = lines[i].split(':');
-        if(lines[i].includes('first'))
-        {
-          (document.getElementById("first-name") as HTMLInputElement).value = data[1];
-        }
-
-        if(lines[i].includes('last'))
-        {
-          (document.getElementById("last-name") as HTMLInputElement).value = data[1];
-        }
-
-        if(lines[i].includes('id'))
-        {
-          (document.getElementById("id") as HTMLInputElement).value = data[1];
-        }
-
-        if(lines[i].includes('contact') || lines[i].includes('number'))
-        {
-          (document.getElementById("contact") as HTMLInputElement).value = data[1];
-        }
-
-        if(lines[i].includes('nat') || lines[i].includes('origin'))
-        {
-          (document.getElementById("nat") as HTMLInputElement).value = data[1];
-        }
+        (document.getElementById("id") as HTMLInputElement).value = dataArray[i][1];
       }
-    };
-    reader.onerror = function() {
-      console.log(reader.error);
-    };
+
+      if(dataArray[i][0].toString().includes('first'))
+      {
+        (document.getElementById("first-name") as HTMLInputElement).value = dataArray[i][1];
+      }
+      
+      if(dataArray[i][0].includes('last'))
+      {
+        (document.getElementById("last-name") as HTMLInputElement).value = dataArray[i][1];
+      }
+
+      if(dataArray[i][0].includes('contact') || dataArray[i][0].includes('number'))
+      {
+        (document.getElementById("contact") as HTMLInputElement).value = dataArray[i][1];
+      }
+
+      if(dataArray[i][0].includes('nat') || dataArray[i][0].includes('origin'))
+      {
+        (document.getElementById("nat") as HTMLInputElement).value = dataArray[i][1];
+      }
+    }
   }
   
   inputChange(fileInputEvent: any) {
     var file = fileInputEvent.target.files[0] ;
     if(file != null)
     {
-      if(file.name.toString().includes('.txt') || file.name.toString().includes('.csv'))
-      {
-        var reader = new FileReader();
-        reader.readAsText(file);
-        console.log(file.name);
-        this.readText(reader);
-      }
+      let formData:FormData = new FormData();
+      formData.append('user-file',file,file.name);
+
+      let userEmail = localStorage.getItem('email');
+      let token = 'Bearer ' ;
+      token += localStorage.getItem('token'); 
+
+      let httpHeaders = new HttpHeaders()
+      .set('Authorization', token);
+
+      this.http.post('http://localhost:5000/userFile/upload/'+ userEmail, formData ,{headers: httpHeaders})
+      .subscribe(Response => {
+        console.log(Response);
+
+        var result = [];
+        for(var i in Response)
+        {
+          result.push([i,Response[i]]);
+        }
+        var userData = Object.entries(result[1][1]);
+        this.getUserDataFromFile(userData);
+      });
     }   
   };
 
@@ -154,7 +163,7 @@ export class HomeComponent implements OnInit {
                 {'propName' : 'national', 'value': nat}
               ]
           
-              console.log("data:" + data);
+              console.log("data" + data);
               console.log('ID IS VALID');
           
               this.http.patch('https://project-2-api-hfr.herokuapp.com/user/'+ userEmail, data ,{headers: httpHeaders})
