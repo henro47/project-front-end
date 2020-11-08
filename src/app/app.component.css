@@ -10,6 +10,10 @@
     
 }
 
+#inputs-div{
+    visibility: hidden;
+}
+
 html, body{
     overflow: auto;
     background-color: #333;

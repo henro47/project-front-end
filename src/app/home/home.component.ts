@@ -4,7 +4,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { faFileUpload, faInfoCircle} from '@fortawesome/free-solid-svg-icons';
 import {idNumberValidator} from '../validators/id-number.validator';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
+import { ThrowStmt } from '@angular/compiler';
 
 @Component({
   selector: 'app-home',
@@ -36,6 +36,12 @@ export class HomeComponent implements OnInit {
     Validators.required,
     Validators.minLength(2)
   ]);
+
+  showInputs()
+  {
+    var link = document.getElementById('inputs-div');
+    link.style.visibility ='visible' ;
+  }
 
   getUserDataFromFile(dataArray)
   {
@@ -95,6 +101,7 @@ export class HomeComponent implements OnInit {
         }
         var userData = Object.entries(result[1][1]);
         this.getUserDataFromFile(userData);
+        this.showInputs();
       });
     }   
   };
@@ -212,6 +219,5 @@ export class HomeComponent implements OnInit {
   
 
   ngOnInit(): void {
-
   }
 }
