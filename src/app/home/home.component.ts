@@ -37,6 +37,16 @@ export class HomeComponent implements OnInit {
     Validators.minLength(2)
   ]);
 
+  clearInputs()
+  {
+    this.fIDNumberControl.setValue('');
+    this.fNameControl.setValue('');
+    this.fLastControl.setValue('');
+    this.fContact.setValue('');
+    this.fNationality.setValue('');
+    var link = document.getElementById('inputs-div');
+    link.style.visibility = 'hidden';
+  }
   showInputs()
   {
     var link = document.getElementById('inputs-div');
@@ -178,10 +188,9 @@ export class HomeComponent implements OnInit {
                   result.push([i,Response[i]]);
                 }
                 console.log(result);
-                if(result[0][0].toString().includes('success'))
+                if(result[0][1].toString().includes('updated'))
                 {
-                  localStorage.setItem('token',result[1][1]);
-                  localStorage.setItem('email',userEmail);
+                  this.clearInputs();
                 }
                 this.openSnackBar(result[0][1].toString(),"Close");
               });
