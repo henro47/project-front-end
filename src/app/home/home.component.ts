@@ -99,7 +99,7 @@ export class HomeComponent implements OnInit {
       let httpHeaders = new HttpHeaders()
       .set('Authorization', token);
 
-      this.http.post('http://localhost:5000/userFile/upload/'+ userEmail, formData ,{headers: httpHeaders})
+      this.http.post('https://project-2-api-hfr.herokuapp.com/userFile/upload/'+ userEmail, formData ,{headers: httpHeaders})
       .subscribe(Response => {
         console.log(Response);
 
