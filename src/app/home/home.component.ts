@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormControl, Validators } from '@angular/forms';
 import { faFileUpload, faInfoCircle} from '@fortawesome/free-solid-svg-icons';
-import { findReadVarNames } from '@angular/compiler/src/output/output_ast';
+import {idNumberValidator} from '../validators/id-number.validator';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import { ThrowStmt } from '@angular/compiler';
 
 @Component({
   selector: 'app-home',
@@ -10,16 +12,9 @@ import { findReadVarNames } from '@angular/compiler/src/output/output_ast';
   styleUrls: ['./home.component.css','../app.component.css']
 })
 export class HomeComponent implements OnInit {
-
-  emailFormControl = new FormControl('', [
-    Validators.required,
-    Validators.email,
-  ]);
-
   fIDNumberControl = new FormControl('',[
     Validators.required,
-    Validators.minLength(13),
-    Validators.maxLength(13)
+    idNumberValidator
   ]);
 
   fNameControl = new FormControl('',[
@@ -42,93 +37,88 @@ export class HomeComponent implements OnInit {
     Validators.minLength(2)
   ]);
 
-  validateID(idNumber:String)
+  clearInputs()
   {
-    var evenSum = "";
-    var oddSum = 0 ;
-    let multiSum = 0 ;
-    for(let i =0;i<idNumber.length-1;i++)
-    {
-      var numAtIndex = parseInt(idNumber[i]);
-      if(i%2 ==0)
-      {
-        oddSum += numAtIndex;
-      }
-      else
-      {
-        evenSum += numAtIndex
-        console.log(evenSum);
-      }
-    }
-
-    multiSum = parseInt(evenSum) * 2 ;
-    let finalSum = 0 ;
-
-    for(let i =0; i< multiSum.toString().length;i++)
-    {
-      var numAtIndex = parseInt(multiSum.toString()[i]);
-      finalSum += numAtIndex;
-    }
-
-    if((oddSum + finalSum)%10==0)
-    {
-      return true;
-    }
-    return false;
+    this.fIDNumberControl.setValue('');
+    this.fNameControl.setValue('');
+    this.fLastControl.setValue('');
+    this.fContact.setValue('');
+    this.fNationality.setValue('');
+    var link = document.getElementById('inputs-div');
+    link.style.visibility = 'hidden';
+  }
+  showInputs()
+  {
+    var link = document.getElementById('inputs-div');
+    link.style.visibility ='visible' ;
   }
 
-  inputChange(fileInputEvent: any) {
-    console.log(fileInputEvent.target.files[0]);
-    var file = fileInputEvent.target.files[0] ;
-    var reader = new FileReader();
+  getUserDataFromFile(dataArray)
+  {
+    for(let i = 0; i<dataArray.length; i++)
+    {
+      
+      if(dataArray[i][0].toString().includes('id'))
+      {
+        this.fIDNumberControl.setValue(dataArray[i][1]);
+      }
 
+      if(dataArray[i][0].toString().includes('first'))
+      {
+        this.fNameControl.setValue(dataArray[i][1]);
+      }
+      
+      if(dataArray[i][0].includes('last'))
+      {
+        this.fLastControl.setValue(dataArray[i][1]);
+      }
+
+      if(dataArray[i][0].includes('contact') || dataArray[i][0].includes('number'))
+      {
+        this.fContact.setValue(dataArray[i][1]);
+      }
+
+      if(dataArray[i][0].includes('nat') || dataArray[i][0].includes('origin'))
+      {
+        this.fNationality.setValue(dataArray[i][1]);
+      }
+    }
+  }
+  
+  inputChange(fileInputEvent: any) {
+    var file = fileInputEvent.target.files[0] ;
     if(file != null)
     {
-      reader.readAsText(file);
+      let formData:FormData = new FormData();
+      formData.append('user-file',file,file.name);
 
-      reader.onload = function() {
-        console.log(reader.result);
-        var lines = reader.result.toString().split('\n');
-        for(let i = 0; i <lines.length;i++)
+      let userEmail = localStorage.getItem('email');
+      let token = 'Bearer ' ;
+      token += localStorage.getItem('token'); 
+
+      let httpHeaders = new HttpHeaders()
+      .set('Authorization', token);
+
+      this.http.post('https://project-2-api-hfr.herokuapp.com/userFile/upload/'+ userEmail, formData ,{headers: httpHeaders})
+      .subscribe(Response => {
+        console.log(Response);
+
+        var result = [];
+        for(var i in Response)
         {
-          if(lines[i].includes('first'))
-          {
-            
-            var data = lines[i].split(':');
-            (document.getElementById("first-name") as HTMLInputElement).value = data[1];
-          }
-
-          if(lines[i].includes('last'))
-          {
-            
-            var data = lines[i].split(':');
-            (document.getElementById("last-name") as HTMLInputElement).value = data[1];
-          }
-
-          if(lines[i].includes('id'))
-          {
-            var data = lines[i].split(':');
-            (document.getElementById("id") as HTMLInputElement).value = data[1];
-          }
-
-          if(lines[i].includes('contact') || lines[i].includes('number'))
-          {
-            var data = lines[i].split(':');
-            (document.getElementById("contact") as HTMLInputElement).value = data[1];
-          }
-
-          if(lines[i].includes('nat') || lines[i].includes('origin'))
-          {
-            var data = lines[i].split(':');
-            (document.getElementById("nat") as HTMLInputElement).value = data[1];
-          }
+          result.push([i,Response[i]]);
         }
-      };
-    
-      reader.onerror = function() {
-        console.log(reader.error);
-      };
-    }    
+        
+        if(result[0][1].toString().includes('success'))
+        {
+          this.load();
+          var userData = Object.entries(result[1][1]);
+          this.getUserDataFromFile(userData);
+          this.showInputs();
+          this.openSnackBar(result[0][1].toString(),"Close");
+        }
+      });
+    }   
   };
 
   uploadTitle = "Upload" ;
@@ -142,64 +132,96 @@ export class HomeComponent implements OnInit {
 
   btnSubmitTitle = "Submit" ;
 
-  constructor(private http: HttpClient) { 
+  constructor(private http: HttpClient, private _snackBar: MatSnackBar) { 
+  }
+
+  showSpinner = false ;
+
+  load()
+  {
+    this.showSpinner = true ;
+    setTimeout(() => {
+      this.showSpinner = false ;
+    },5000);
   }
 
 
-  submitInfo(){
-    let firstName =  " " ;
-    let lastName = " " ;
-    let id = " " ;
-    let con = " " ;
-    let nat = " " ;
-    
-    firstName = (document.getElementById("first-name") as HTMLInputElement).value ;
-    lastName = (document.getElementById("last-name") as HTMLInputElement).value ;
-    id = (document.getElementById("id") as HTMLInputElement).value ;
-    con = (document.getElementById("contact") as HTMLInputElement).value ;
-    nat = (document.getElementById("nat") as HTMLInputElement).value ;
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 2000,
+    });
+  }
 
-    if(this.validateID(id))
+  submitInfo(){
+    if(this.fIDNumberControl.valid)
     {
-      let userEmail = localStorage.getItem('email');
-      let token = 'Bearer ' ;
-      token += localStorage.getItem('token'); 
-  
-      let httpHeaders = new HttpHeaders()
-      .set('Authorization', token);
-  
-      var data = [
-        {'propName' : 'idNum', 'value': id},
-        {'propName' : 'fName', 'value': firstName},
-        {'propName' : 'lName', 'value': lastName},
-        {'propName' : 'contact', 'value': con},
-        {'propName' : 'national', 'value': nat}
-      ]
-  
-      console.log("data:" + data);
-      console.log('ID IS VALID');
-  
-      this.http.patch('https://project-2-api-hfr.herokuapp.com/user/'+ userEmail, data ,{headers: httpHeaders})
-      .subscribe(Response => {
-        console.log(Response);
-      });
+      if(this.fNameControl.valid)
+      {
+        if(this.fLastControl.valid)
+        {
+          if(this.fContact.valid)
+          {
+            if(this.fNationality.valid)
+            {
+              let userEmail = localStorage.getItem('email');
+              let token = 'Bearer ' ;
+              token += localStorage.getItem('token'); 
+          
+              let httpHeaders = new HttpHeaders()
+              .set('Authorization', token);
+          
+              var data = [
+                {'propName' : 'idNum', 'value': this.fIDNumberControl.value},
+                {'propName' : 'fName', 'value': this.fNameControl.value},
+                {'propName' : 'lName', 'value': this.fLastControl.value},
+                {'propName' : 'contact', 'value': this.fContact.value},
+                {'propName' : 'national', 'value': this.fNationality.value}
+              ]     
+          
+              this.http.patch('https://project-2-api-hfr.herokuapp.com/user/'+ userEmail, data ,{headers: httpHeaders})
+              .subscribe(Response => {
+                console.log(Response);
+
+                var result = [];
+                for(var i in Response)
+                {
+                  result.push([i,Response[i]]);
+                }
+                console.log(result);
+                if(result[0][1].toString().includes('updated'))
+                {
+                  this.clearInputs();
+                }
+                this.openSnackBar(result[0][1].toString(),"Close");
+              });
+            }
+            else
+            {
+              this.openSnackBar("Please provide your nationality","Close");
+            }
+          }
+          else
+          {
+            this.openSnackBar("Please provide your contact number","Close");
+          }
+        }
+        else
+        {
+          this.openSnackBar("Please provide your last name","Close");
+        }
+      }
+      else
+      {
+        this.openSnackBar("Please provide your first name","Close");
+      }
+    }
+    else
+    {
+      this.openSnackBar("Please provide your identification number (RSA)","Close");
     }
   }
   
 
   ngOnInit(): void {
-    /*this.http.get('https://project-2-api-hfr.herokuapp.com/helloworld') 
-    .subscribe(Response => { 
-      console.log(Response);
-      var result = [];
-      for(var i in Response)
-      {
-        result.push([i,Response[i]]);
-      }
-      console.log("Array: " + result);
-      //document.getElementById("test").innerHTML = result.toString();
-    }); 
-    */
-
   }
 }

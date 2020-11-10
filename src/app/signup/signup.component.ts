@@ -37,10 +37,10 @@ export class SignupComponent implements OnInit {
   
   signUp()
   {
-    let userEmail =  (document.getElementById("username") as HTMLInputElement).value;
-    let userPassword =  (document.getElementById("password") as HTMLInputElement).value;
-    let confirm =  (document.getElementById("confirm-password") as HTMLInputElement).value;
-
+    let userEmail =  this.fUsernameControl.value;
+    let userPassword =  this.fPasswordControl.value
+    let confirm =  this.fConfirmPWdControl.value;
+    
     if(this.fUsernameControl.valid)
     {
       if(this.fPasswordControl.valid)

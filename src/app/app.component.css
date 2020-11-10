@@ -10,6 +10,10 @@
     
 }
 
+#inputs-div{
+    visibility: hidden;
+}
+
 html, body{
     overflow: auto;
     background-color: #333;
@@ -103,9 +107,18 @@ html, body{
     justify-content: center;
   }
   
-  .form-full-width {
+.form-full-width {
     width: 100%;
   }
+
+.spinner{
+    position: fixed;
+    left: 50%;
+    top: 35%;
+    z-index: 1000;
+    height: 2em;
+    width: 2rem;
+}
 
 @media only screen and (max-width: 30.0625rem){
     .flex-row{
