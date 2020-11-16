@@ -3,6 +3,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { HttpClient } from '@angular/common/http';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signup',
@@ -27,7 +28,7 @@ export class SignupComponent implements OnInit {
     Validators.minLength(8)
   ]);
 
-  constructor(private http: HttpClient, private _snackBar: MatSnackBar) { }
+  constructor(private http: HttpClient, private _snackBar: MatSnackBar, private router: Router) { }
 
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
@@ -56,6 +57,7 @@ export class SignupComponent implements OnInit {
             .subscribe(Response => {
               console.log(Response)
               this.openSnackBar("User Created Successfully","Close");
+              this.router.navigate(['/login']);
             });
           }
           else
